@@ -1,12 +1,13 @@
 <?php
 
-function parseTokens(array $tokens, int $numParameters, int $lineCount, string $errorLogName): void {
+function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName): void {
    foreach ($tokens as $entry) {
       for ($i=0; $i < $numParameters; $i++) { 
          //empty parameter
-         if($entry[i] == "") {
+         if($entry[$i] == "") {
+
             $logfile = fopen($errorLogName, 'a');
-            fwrite($logfile, "Missing parameter: " + i + " at line: " + $lineCount);
+            fwrite($logfile, "Missing parameter: " . $i . " at line: " . $lineCount . "\n");
             fclose($logfile);
          }
       } 

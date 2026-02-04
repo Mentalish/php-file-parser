@@ -4,28 +4,27 @@
  * return an array of parameters of the file given the file name and the max memory that can be used
  * @return ?string[][]
  */
-function returnFileBuffer(string $filename, int $maxbuffersize): ?array {
-   if(!file_exists($filename)){
-      return null;
-   }
-
-   $file = fopen($filename, "r");
-
+function returnFileBuffer($file, int $maxbuffersize): ?array {
    $buffer = fread($file, $maxbuffersize);
    $index = strlen($buffer) - 1;
-
+   $rewind = 0;
    //partial entry in buffer
-   while ($buffer[$index] != '\n' && !feof($file)) {
+   while ($index >= 0 && $buffer[$index] != "\n" && !feof($file)) {
       $index--;
+      $rewind++;
    }
+   if($index >= 0) {
+      $buffer = substr($buffer, 0, $index);
+      fseek($file, -$rewind, SEEK_CUR);
+   }
+   
 
-   $buffer = substr($buffer, 0, $index);
-
-   $entries = explode('\n', $buffer);
+   $entries = explode("\n", $buffer);
+   $entriesArr = [];
 
    foreach ($entries as $entry) {
-      $entry = explode(',', $entry);
+      $entriesArr[] = explode(',', $entry);
    }
 
-   return $entries;
+   return $entriesArr;
 }
