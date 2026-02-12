@@ -28,3 +28,4 @@ function returnFileBuffer($file, int $maxbuffersize): ?array {
 
    return $entriesArr;
 }
+?>
