@@ -1,6 +1,6 @@
 <?php
 
-function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $db_copy, $dblink): void {
+function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink): void {
       foreach ($tokens as $entry) {
       $errorLine = false;
       for ($i=0; $i < $numParameters; $i++) { 
@@ -13,9 +13,9 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
          }
       }
 
-      if ($errorLine == false && db == true) {
-         $sql="Insert Into 'devices' ('device_type', 'manufacturer_type', 'serial_number')
-           values ('$entry[0]', $entry[1], $entry[2])";
+      if ($errorLine == false && $dbCopy == true) {
+         $sql="Insert Into `devices` (`device_type`, `manufacturer_type`, `serial_number`)
+           values ('$entry[0]', '$entry[1]', '$entry[2]')";
    $dblink->query($sql) or
            die("Something went wrong with $sql<br>".$dblink->error); 
       }  
