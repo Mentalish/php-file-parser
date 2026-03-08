@@ -4,12 +4,12 @@
 include 'parse.php';
 include 'lexer.php';
 
-$un = argv[1];
-$pw = argv[2];
-$host = argv[3];
-$db = argv[4];
+$un = $argv[1];
+$pw = $argv[2];
+$host = $argv[3];
+$db = $argv[4];
 
-$fileName = argv[5];
+$fileName = $argv[5];
 $dblink = new mysqli($host,$un,$pw,$db); //ODBC
 $start = microtime(true);
 
