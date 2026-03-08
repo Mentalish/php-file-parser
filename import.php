@@ -1,7 +1,7 @@
 <?php
 include 'orchestrator.php';
 $operators = "";
-$operators .= "uphdfcd:";  // Required value
+$operators .= "u:p:h:n:f:c:d:";  // Required value
 $operators .= "w::"; // Optional value
 
 $configuration = getopt($operators);
