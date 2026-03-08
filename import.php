@@ -9,10 +9,10 @@ $configuration = getopt($operators);
 $un = $configuration["u"];
 $pw = $configuration["p"];
 $host =$configuration["h"];
-$db = $configuration["d"];
+$db = $configuration["n"];
 $dataFile = $configuration["f"];
 $processCount = $configuration["c"];
-$dataDirectory = $configuration["r"];
+$dataDirectory = $configuration["d"];
 
 orchestrate($dataFile, $processCount, $dataDirectory, $un, $pw, $host, $db);
 ?>
