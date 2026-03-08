@@ -12,7 +12,7 @@ function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, 
       }
 
       $filePath = $destDirectory . '/' . $file;
-      shell_exec("./run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . " 2>&1 &");
+      shell_exec("./run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . " > /dev/null 2>&1 &");
    }
 }
 ?>
