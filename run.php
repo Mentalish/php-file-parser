@@ -2,12 +2,12 @@
 include 'parse.php';
 include 'lexer.php';
 
-$un = "<user>";
-$pw = "<password>";
-$host = "<host>";
-$db = "db";
+$un = argv[1];
+$pw = argv[2];
+$host = argv[3];
+$db = argv[4];
 
-$fileName = "equipment-part2.txt";
+$fileName = argv[5];
 $dblink = new mysqli($host,$un,$pw,$db); //ODBC
 $start = microtime(true);
 
