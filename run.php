@@ -1,3 +1,5 @@
+#!/usr/bin/php
+
 <?php
 include 'parse.php';
 include 'lexer.php';
