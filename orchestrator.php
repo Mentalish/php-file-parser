@@ -6,7 +6,7 @@ function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, 
 
    foreach ($file_names as $file) {
       $filePath = $destDirectory . "/" . $file;
-      shell_exec("./run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath. " ");
+      shell_exec("./run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . "2>&1 &");
    }
 }
 ?>
