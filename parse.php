@@ -23,7 +23,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
 
       //serial number error
       $prefix = "";
-      $delimiter = "";
+      $delimeter = "";
       $body = "";
       $serialNumberFull = partSerialNumber($entry[2], $prefix, $delimeter, $body);
 
@@ -55,7 +55,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
          }
 
          //create new serial number
-         $sql = "SELECT `serial_number_id` FROM `serial_numbers` WHERE `prefix` = '$prefix' AND `body` = '$body' ;"; 
+         $sql = "SELECT `serial_number_id` FROM `serial_numbers` WHERE `serial_number_prefix` = '$prefix' AND `serial_number_body` = '$body' ;"; 
          if(!($serialNumberId = $dblink->query($sql)->fetch_column())) {
             $sql = "INSERT INTO `serial_numbers` (`serial_number_prefix`, `serial_number_body`) values ('$prefix', '$body')";
             $dblink->query($sql);
