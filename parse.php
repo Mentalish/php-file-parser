@@ -22,6 +22,9 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       }
 
       //serial number error
+      $prefix = "";
+      $delimiter = "";
+      $body = "";
       $serialNumberFull = partSerialNumber($entry[2], $prefix, $delimeter, $body);
 
       //incorect size
