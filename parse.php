@@ -65,16 +65,9 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
             $deviceTypeId = $deviceTypeCache[$entry[0]];
          }
          
-         //create new serial number
-         $sql = "SELECT `serial_number_id` FROM `serial_numbers` WHERE `serial_number_prefix` = '$prefix' AND `serial_number_body` = '$body' ;"; 
-         if(!($serialNumberId = $dblink->query($sql)->fetch_column())) {
-            $sql = "INSERT INTO `serial_numbers` (`serial_number_prefix`, `serial_number_body`) values ('$prefix', '$body')";
-            $dblink->query($sql);
-            $serialNumberId = $dblink->insert_id;
-         }                           
          //insert the entire entry to the main table
-         $sql = "INSERT INTO `devices` (`device_type_id`, `manufacturer_id`, `serial_number_id`, `line_number`)
-           values ('$deviceTypeId', '$manufacturerId', '$serialNumberId', '$lineCount')";
+         $sql = "INSERT INTO `devices` (`device_type_id`, `manufacturer_id`, `serial_number_prefix`, `serial_number_body` , `line_number`)
+           values ('$deviceTypeId', '$manufacturerId', '$prefix', '$body', '$lineCount')";
          $dblink->query($sql) or die;
 
       }  
