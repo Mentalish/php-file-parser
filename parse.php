@@ -25,7 +25,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       $serialNumberFull = partSerialNumber($entry[2], $prefix, $delimeter, $body);
 
       //incorect size
-      if(count($body) != 32) {
+      if(strlen($body) != 32) {
       
       }
 
