@@ -41,14 +41,14 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
          if(!($manufacturerId = $dblink->query($sql)->fetch_column())) {
             $sql = "INSERT INTO `manufacturers` (`manufacturer_name`) values ('$entry[1]')";
             $dblink->query($sql);
-            $manufacturerId = $dblink->insert_id();
+            $manufacturerId = $dblink->insert_id;
          }
          // find if device type is already in the database if not create it
          $sql = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$entry[0]' ;"; 
          if(!($deviceTypeId = $dblink->query($sql)->fetch_column())) {
             $sql = "INSERT INTO `device_types` (`device_type_name`) values ('$entry[0]')";
             $dblink->query($sql);
-            $deviceTypeId = $dblink->insert_id();
+            $deviceTypeId = $dblink->insert_id;
          }
 
          //create new serial number
@@ -56,7 +56,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
          if(!($serialNumberId = $dblink->query($sql)->fetch_column())) {
             $sql = "INSERT INTO `serial_numbers` (`serial_number_prefix`, `serial_number_body`) values ('$prefix', '$body')";
             $dblink->query($sql);
-            $serialNumberId = $dblink->insert_id();
+            $serialNumberId = $dblink->insert_id;
          }                           
          //insert the entire entry to the main table
          $sql = "INSERT INTO `devices` (`device_type_id`, `manufacturer_id`, `serial_number_id`, `line_number`)
