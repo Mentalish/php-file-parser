@@ -13,13 +13,15 @@ $fileName = $argv[5];
 $dblink = new mysqli($host,$un,$pw,$db); //ODBC
 $start = microtime(true);
 
+$manufacturerCache = [];
+$deviceTypeCache = [];
 
 $file = fopen($fileName, 'r');
 $lineCount = 1;
 while (!feof($file)) {
    $tokens = returnFileBuffer($file, 2048 * 7); 
    if($tokens) {
-      parseTokens($tokens, 3, $lineCount, 'error', true, $dblink);
+      parseTokens($tokens, 3, $lineCount, 'error', true, $dblink, $deviceTypeCache, $manufacturerCache);
    }else {
       echo "no tokens";
    }

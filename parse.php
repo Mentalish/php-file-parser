@@ -1,6 +1,6 @@
 <?php
 
-function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink): void {
+function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
       foreach ($tokens as $entry) {
       $errorLine = false;
       for ($i=0; $i < $numParameters; $i++) { 
@@ -40,20 +40,31 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       //write to db
       if ($errorLine == false && $dbCopy == true) {
          // find if manufacturer is already in the database if not create it
-         $sql = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$entry[1]' ;"; 
-         if(!($manufacturerId = $dblink->query($sql)->fetch_column())) {
-            $sql = "INSERT INTO `manufacturers` (`manufacturer_name`) values ('$entry[1]')";
-            $dblink->query($sql);
-            $manufacturerId = $dblink->insert_id;
-         }
-         // find if device type is already in the database if not create it
-         $sql = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$entry[0]' ;"; 
-         if(!($deviceTypeId = $dblink->query($sql)->fetch_column())) {
-            $sql = "INSERT INTO `device_types` (`device_type_name`) values ('$entry[0]')";
-            $dblink->query($sql);
-            $deviceTypeId = $dblink->insert_id;
+         if(!isset($manufacturerCache[$entry[1]])) {
+            $sql = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$entry[1]' ;"; 
+            if(!($manufacturerId = $dblink->query($sql)->fetch_column())) {
+               $sql = "INSERT INTO `manufacturers` (`manufacturer_name`) values ('$entry[1]')";
+               $dblink->query($sql);
+               $manufacturerId = $dblink->insert_id;
+            }
+            $manufacturerCache[$entry[1]] = $manufacturerId;
+         } else {
+            $manufacturerId = $manufacturerCache[$entry[1]]; 
          }
 
+         // find if device type is already in the database if not create it
+         if(!isset($deviceTypeCache[$entry[0]])) {
+            $sql = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$entry[0]' ;"; 
+            if(!($deviceTypeId = $dblink->query($sql)->fetch_column())) {
+               $sql = "INSERT INTO `device_types` (`device_type_name`) values ('$entry[0]')";
+               $dblink->query($sql);
+               $deviceTypeId = $dblink->insert_id;
+            }
+            $deviceTypeCache[$entry[0]] = $deviceTypeId; 
+         } else {
+            $deviceTypeId = $deviceTypeCache[$entry[0]];
+         }
+         
          //create new serial number
          $sql = "SELECT `serial_number_id` FROM `serial_numbers` WHERE `serial_number_prefix` = '$prefix' AND `serial_number_body` = '$body' ;"; 
          if(!($serialNumberId = $dblink->query($sql)->fetch_column())) {
