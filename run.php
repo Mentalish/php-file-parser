@@ -1,6 +1,7 @@
 <?php
 include 'parse.php';
 include 'lexer.php';
+include 'log.php';
 
 $un = $argv[1];
 $pw = $argv[2];
@@ -29,7 +30,5 @@ $end = microtime(true);
 fclose($file);
 $timeSeconds = $end - $start;
 $timeMin = $timeSeconds/60;
-echo "Complete";
-echo "Time Seconds: $timeSeconds";
-echo "Time Minutes: $timeMin";
+writeToLog($argv[7], "PROCESS", "Process finished processing file; Time elapsed " . $timeMin);
 ?>
