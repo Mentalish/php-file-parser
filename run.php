@@ -1,6 +1,7 @@
 <?php
-include 'parse.php';
-include 'lexer.php';
+include_once('parse.php');
+include_once('lexer.php');
+include_once('log.php')
 
 $un = $argv[1];
 $pw = $argv[2];
