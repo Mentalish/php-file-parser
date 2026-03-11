@@ -12,7 +12,7 @@ function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, 
       }
 
       $filePath = $destDirectory . '/' . $file;
-      $lineOffset =+ intval(shell_exec("wc -l " . $filePath));
+      $lineOffset += intval(shell_exec("wc -l < " . $filePath));
       shell_exec("php run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . " " . $lineOffset . " > /dev/null 2>&1 &");
    }
 }
