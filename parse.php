@@ -1,22 +1,27 @@
 <?php
+include 'log.php';
 
 function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
-      foreach ($tokens as $entry) {
+   $typo = '[0-9@#$%^&*()`]|^[a-z]';
+   foreach ($tokens as $entry) {
       $errorLine = false;
       for ($i=0; $i < $numParameters; $i++) { 
          //empty parameter
          if($entry[$i] == "") {
             $errorLine = true;
-            $logfile = fopen($errorLogName, 'a');
-            fwrite($logfile, "Missing parameter: " . $i . " at line: " . $lineCount . "\n");
-            fclose($logfile);
-         }
+            writeToLog($errorLogName, "DATA ERROR", "Missing parameter: " . $i . " at line: " . $lineCount);
+            }
 
          //typo
+         if(strlen(entry[i]) == 1 | preg_grep($typo)) {
+            writeToLog($errorLogName, "DATA ERROR", "Typo on parameter: " . $i . " at line: " . $lineCount);
+
+         }
          
          //too many tokens in entry
          if($numParameters != count($entry)) {
-         
+            $errorLine = true;
+            writeToLog($errorLogName, "DATA ERROR", "Too many or too few items in entry");
          }
 
       }
@@ -29,12 +34,13 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
 
       //incorect size
       if(strlen($body) != 32) {
-      
+         $errorLine = true;
+         writeToLog($errorLogName, "DATA ERROR", "Serial number is the incorrect length on entry number " . $lineCount);
       }
 
       //incorect delimiter
       if($delimeter != '-') {
-      
+         writeToLog($errorLogName, "DATA ERROR (remediated)", "Incorrect delimiter found in serial number on entry number " . $lineCount);
       }
       
       //write to db

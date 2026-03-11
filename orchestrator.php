@@ -17,7 +17,7 @@ function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, 
       }
 
       $filePath = $destDirectory . '/' . $file;
-      writeToLog($LOGFILE, "PROCESS", "Initializing process number " . $index); 
+      writeToLog($LOGFILE, "PROCESS", "Initializing process number " . ($index - 2)); 
       shell_exec("php run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . " " . $lineOffset . " " . $LOGFILE . " > /dev/null 2>&1 &");
       $lineOffset += intval(shell_exec("wc -l < " . $filePath));
    }
