@@ -1,5 +1,5 @@
 <?php
-include 'log.php';
+include_once('log.php');
 
 function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
    $typo = '/(^[a-z])|([0-9@#$%^&*()\'`])/';

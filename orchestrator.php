@@ -1,5 +1,5 @@
 <?php
-include 'log.php';
+include_once('log.php');
 
 function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, $db) {
    $LOGFILE = 'import.log';
