@@ -13,7 +13,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
             }
 
          //typo
-         if($i != 3 && strlen($entry[$i]) == 1 | preg_match($typo, $entry[$i])) {
+         if($i != 3 && strlen($entry[$i]) == 1 || preg_match($typo, $entry[$i])) {
             writeToLog($errorLogName, "DATA ERROR", "Typo on parameter: " . $i . " at line: " . $lineCount);
 
          }
