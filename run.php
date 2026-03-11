@@ -19,7 +19,7 @@ $lineNumber = $argv[6] + 1;
 while (!feof($file)) {
    $tokens = returnFileBuffer($file, 2048 * 7); 
    if($tokens) {
-      parseTokens($tokens, 3, $lineNumber, 'error', true, $dblink, $deviceTypeCache, $manufacturerCache);
+      parseTokens($tokens, 3, $lineNumber, $argv[7], true, $dblink, $deviceTypeCache, $manufacturerCache);
    }else {
       echo "no tokens";
    }
