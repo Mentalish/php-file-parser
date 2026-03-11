@@ -15,7 +15,7 @@ $manufacturerCache = [];
 $deviceTypeCache = [];
 
 $file = fopen($fileName, 'r');
-$lineNumber = argv[6] + 1;
+$lineNumber = $argv[6] + 1;
 while (!feof($file)) {
    $tokens = returnFileBuffer($file, 2048 * 7); 
    if($tokens) {
