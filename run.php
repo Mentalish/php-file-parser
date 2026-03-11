@@ -1,5 +1,3 @@
-#!/usr/bin/php
-
 <?php
 include 'parse.php';
 include 'lexer.php';
@@ -17,11 +15,11 @@ $manufacturerCache = [];
 $deviceTypeCache = [];
 
 $file = fopen($fileName, 'r');
-$lineCount = 1;
+$lineNumber = $argv[6] + 1;
 while (!feof($file)) {
    $tokens = returnFileBuffer($file, 2048 * 7); 
    if($tokens) {
-      parseTokens($tokens, 3, $lineCount, 'error', true, $dblink, $deviceTypeCache, $manufacturerCache);
+      parseTokens($tokens, 3, $lineNumber, 'error', true, $dblink, $deviceTypeCache, $manufacturerCache);
    }else {
       echo "no tokens";
    }
