@@ -101,7 +101,7 @@ function detectEmpty($parameter, $parameterName, $lineNumber, $errorLogName) : b
 }
 
 function checkTypo($typoRegex, $parameter, $parameterName, $lineNumber, $errorLogName) : bool {
-   if(strlen == 1 || preg_match ($typoRegex, $parameter)) {
+   if(strlen($parameter) == 1 || preg_match ($typoRegex, $parameter)) {
       writeToLog($errorLogName, "DATA ERROR", "Typo on parameter: " . $parameterName . " at line: " . $lineNumber);
       return true;
    }
