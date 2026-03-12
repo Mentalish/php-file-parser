@@ -4,7 +4,7 @@ include_once('log.php');
 function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
    $TYPO_MANUFACTURER = "/(^[a-z])|([0-9@#$%^&*()'`])/";
    $TYPO_DEVICE_TYPE = "/([0-9@#$%^&*()'`])/";
-
+   $lineCount++;
    foreach ($tokens as $entry) {
       $errorLine = false;
       
@@ -77,8 +77,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
            values ('$deviceTypeId', '$manufacturerId', '$prefix', '$body', '$lineCount')";
          $dblink->query($sql) or die;
 
-      }  
-      $lineCount++;
+         }  
       }
 }
 
