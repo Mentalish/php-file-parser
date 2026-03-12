@@ -124,5 +124,7 @@ function validateSerialNumber(&$prefex, &$body, $serialNumber, $lineNumber, $err
          writeToLog($errorLogName, "DATA ERROR (remediated)", "Incorrect delimiter found in serial number on entry number " . $lineNumber);
          return true;
       }
+
+      return false;
 }
 ?>
