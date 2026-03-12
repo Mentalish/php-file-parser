@@ -2,7 +2,7 @@
 include_once('log.php');
 
 function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
-   $typo = '/(^[a-z])|([0-9@#$%^&*()\'`])/';
+   $typo = "/(^[a-z])|([0-9@#$%^&*()'`])/";
    foreach ($tokens as $entry) {
       $errorLine = false;
       for ($i=0; $i < $numParameters; $i++) { 
