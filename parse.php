@@ -10,8 +10,8 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       
       //too many tokens in entry
       if($numParameters != count($entry)) {
-         $errorLine = true;
          writeToLog($errorLogName, "DATA ERROR", "Too many or too few items in entry");
+         continue; 
       }
 
       $deviceType = $entry[0];
