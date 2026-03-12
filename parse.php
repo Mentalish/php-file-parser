@@ -9,7 +9,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       $lineCount++;
       //too many tokens in entry
       if($numParameters != count($entry)) {
-         writeToLog($errorLogName, "DATA ERROR", "Too many or too few items in entry");
+         writeToLog($errorLogName, "DATA ERROR", "Too many or too few items in line: " . $lineCount);
          continue; 
       }
 
