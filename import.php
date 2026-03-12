@@ -1,5 +1,5 @@
 <?php
-include 'orchestrator.php';
+include_once('orchestrator.php');
 $operators = "";
 $operators .= "u:p:h:n:f:c:d:";  // Required value
 $operators .= "w::"; // Optional value
