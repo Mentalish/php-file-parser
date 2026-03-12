@@ -82,6 +82,10 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
 }
 
 function partSerialNumber(string $fullSerialNumber, &$prefix, &$delimeter, &$body) : void {
+   if($fullSerialNumber == null) {
+      return;
+   }
+
    $prefix = substr($fullSerialNumber, 0,2);
    $delimeter = $fullSerialNumber[2];
    $body = substr($fullSerialNumber, 3);
