@@ -18,7 +18,7 @@ $deviceTypeCache = [];
 $file = fopen($fileName, 'r');
 $lineNumber = $argv[6] + 1;
 while (!feof($file)) {
-   $tokens = returnFileBuffer($file, 2048 * 7); 
+   $tokens = fgetcsv($file, ",");
    if($tokens) {
       parseTokens($tokens, 3, $lineNumber, $argv[7], true, $dblink, $deviceTypeCache, $manufacturerCache);
    }else {
