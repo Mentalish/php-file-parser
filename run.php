@@ -22,7 +22,7 @@ while (!feof($file)) {
    if($tokens) {
       parseTokens($tokens, 3, $lineNumber, $argv[7], true, $dblink, $deviceTypeCache, $manufacturerCache);
    }else {
-      echo "no tokens";
+      break; 
    }
 }
 
