@@ -28,4 +28,14 @@ function returnFileBuffer($file, int $maxbuffersize): ?array {
 
    return $entriesArr;
 }
+
+function getEntries($file, $entriesPerBuffer): ?array{
+   $tokens = [];
+
+   for ($i=0; $i < $entriesPerBuffer ; $i++) {
+      $tokens[] = fgetcsv($file, 0, ",");
+   }
+
+   return $tokens;
+}
 ?>
