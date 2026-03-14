@@ -15,33 +15,20 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
 
    shell_exec("mkdir -p " . $destDirectory);
    
-   for ($k=0; $k < $numFiles; $k++) { 
+   for ($k=0; $k < $numFiles; $k++) {
+      $linesProcessedInFragment = 0; 
       $fragmentFilePointer = fopen($destDirectory . "/" . $newFileName, "w");
-      for ($i=0; $i < $linesPerFile ; $i++) { 
-         for ($j=0; $j < $lineBufferSize; $j++) { 
-            $lineBuffer .= fgets($fpointer);
-         }
-         fwrite($fragmentFilePointer, $lineBuffer);
-         $lineBuffer = "";
+      
+      while ($linesProcessedInFragment <= $linesPerFile && !feof($fpointer)) {
+         fwrite($fragmentFilePointer, fgetc($fpointer)); 
       }
-
-      if($k == $numFiles - 1) {
-         while(!feof($fpointer)) {
-            for ($l=0; $l < $lineBufferSize; $l++) { 
-            $lineBuffer .= fgets($fpointer);
-            }
-            fwrite($fragmentFilePointer, $lineBuffer);
-            $lineBuffer = "";
-         }
-      }
-
-      if($lineBuffer) {
-         fwrite($fragmentFilePointer, $lineBuffer); //handle partial buffer
-         $lineBuffer = "";
-      }
-
+      
       fclose($fragmentFilePointer);
       str_increment($newFileName);
+   }
+
+   if(!feof($fpointer)) {
+      fwrite($fragmentFilePointer, fgetc($fpointer));
    } 
 }
 
