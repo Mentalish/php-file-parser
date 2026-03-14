@@ -24,7 +24,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
       }
 
       if($k == $numFiles - 1) {
-         while(!feof($sourceFile)) {
+         while(!feof($fpointer)) {
             for ($l=0; $l < $lineBufferSize; $l++) { 
             $lineBuffer = fgets($fpointer);
             }
