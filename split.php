@@ -15,7 +15,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
    shell_exec("mkdir -p " . $destDirectory);
    
    for ($k=0; $k < $numFiles; $k++) { 
-      $fragmentFilePointer = fopen($destDirectory, "/" . $newFileName, "w");
+      $fragmentFilePointer = fopen($destDirectory . "/" . $newFileName, "w");
       for ($i=0; $i < $linesPerFile ; $i++) { 
          for ($j=0; $j < $lineBufferSize; $j++) { 
             $lineBuffer = fgets($fpointer);
