@@ -6,7 +6,7 @@ function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, 
    $LOGFILE = 'import.log';
    splitFile($dataFile, $destDirectory, intval($processCount), 10);
    $sourceFileSize = countFile($dataFile);
-   writeToLog($LOGFILE, "START", "Starting import procress on file" . $dataFile . "; " . $sourceFileSize . " records found");
+   writeToLog($LOGFILE, "START", "Starting import process on file" . $dataFile . "; " . $sourceFileSize . " records found");
 
    $file_names = scandir($destDirectory);
    $lineOffset = 0;
