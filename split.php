@@ -1,17 +1,21 @@
 <?php
 function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
    $newFileName = "aaa";
-   $filenames = [];
    $fpointer = fopen($sourceFile, "r");
    $sourceLineCount = countFile($fpointer);
 
    rewind($fpointer);
 
    $linesPerFile = $sourceLineCount / $numFiles;
+
+   if(is_dir($destDirectory)) {
+      rmdir($destDirectory);
+   }
+
+   mkdir($destDirectory);
    
    for ($k=0; $k < $numFiles; $k++) { 
       $fragmentFilePointer = fopen($destDirectory, "/" . $newFileName, "w");
-      $filenames [] = $newFileName;
       for ($i=0; $i < $linesPerFile ; $i++) { 
          for ($j=0; $j < $lineBufferSize; $j++) { 
             $lineBuffer = fgets($sourceFile);
