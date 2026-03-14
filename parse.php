@@ -4,13 +4,12 @@ include_once('log.php');
 function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, bool $dbCopy, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
    $TYPO_MANUFACTURER = "/(^[a-z])|([0-9@#$%^&*()'`])/";
    $TYPO_DEVICE_TYPE = "/([0-9@#$%^&*()'`])/";
-   $lineCount++;
    foreach ($tokens as $entry) {
       $errorLine = false;
-      
+      $lineCount++;
       //too many tokens in entry
       if($numParameters != count($entry)) {
-         writeToLog($errorLogName, "DATA ERROR", "Too many or too few items in entry");
+         writeToLog($errorLogName, "DATA ERROR", "Too many or too few items in line: " . $lineCount);
          continue; 
       }
 
