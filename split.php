@@ -29,6 +29,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
    }
 
    if(!feof($fpointer)) {
+      fopen(str_decrement($newFileName));
       fwrite($fragmentFilePointer, fgetc($fpointer));
       fclose($fragmentFilePointer);
    } 
