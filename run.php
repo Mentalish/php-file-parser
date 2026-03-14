@@ -17,13 +17,8 @@ $deviceTypeCache = [];
 
 $file = fopen($fileName, 'r');
 $lineNumber = $argv[6];
-while (!feof($file)) {
-   $tokens = getEntries($file, 10);
-   if($tokens) {
-      parseTokens($tokens, 3, $lineNumber, $argv[7], true, $dblink, $deviceTypeCache, $manufacturerCache);
-   }else {
-      break; 
-   }
+while ($tokens = getEntries($file, 10)) {
+   parseTokens($tokens, 3, $lineNumber, $argv[7], true, $dblink, $deviceTypeCache, $manufacturerCache);
 }
 
 $end = microtime(true);
