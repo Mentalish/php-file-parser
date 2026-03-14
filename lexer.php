@@ -35,13 +35,16 @@ function getEntries($file, $entriesPerBuffer): ?array{
    for ($i=0; $i < $entriesPerBuffer ; $i++) {
       $entry = fgetcsv($file, 0, ",");
 
-      if($entry == false && count($tokens) == 0) {
-         return null;
+      if($entry == false) {
+         break;
       }
 
       $tokens[] = $entry;
    }
-
-   return $tokens;
+   if ($tokens) {
+      return $tokens;
+   } else {
+      return null;
+   }
 }
 ?>
