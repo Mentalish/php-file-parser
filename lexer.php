@@ -39,7 +39,7 @@ function getEntries($file, $entriesPerBuffer): ?array{
          return null;
       }
 
-      tokens[] = $entry;
+      $tokens[] = $entry;
    }
 
    return $tokens;
