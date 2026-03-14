@@ -1,10 +1,10 @@
 <?php
 include_once('log.php');
+include_once('split.php');
 
 function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, $db) {
    $LOGFILE = 'import.log';
-   shell_exec("./safe-split.sh " . $processCount . " " . $dataFile . " " . $destDirectory);
-   
+   splitFile($dataFile, $destDirectory, $processCount, 10);
    writeToLog($LOGFILE, "START", "Starting import procress on file" . $dataFile);
 
    $file_names = scandir($destDirectory);
@@ -19,6 +19,6 @@ function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, 
       $filePath = $destDirectory . '/' . $file;
       writeToLog($LOGFILE, "PROCESS", "Initializing process number " . ($index - 2)); 
       shell_exec("php run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . " " . $lineOffset . " " . $LOGFILE . " > /dev/null 2>&1 &");
-      $lineOffset += intval(shell_exec("wc -l < " . $filePath));
+      $lineOffset += countFile($filePath);  
    }
 }
