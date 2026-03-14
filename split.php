@@ -20,7 +20,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
       $fragmentFilePointer = fopen($destDirectory . "/" . $newFileName, "w");
       
       while ($linesProcessedInFragment <= $linesPerFile && !feof($fpointer)) {
-         fwrite($fragmentFilePointer, fgetc($fpointer));
+         fwrite($fragmentFilePointer, fgets($fpointer));
          $linesProcessedInFragment++; 
       }
       
@@ -30,7 +30,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
 
    if(!feof($fpointer)) {
       $lastFilePointer = fopen(str_decrement($newFileName), "w");
-      fwrite($lastFilePointer, fgetc($fpointer));
+      fwrite($lastFilePointer, fgets($fpointer));
       fclose($lastFilePointer);
    } 
 }
