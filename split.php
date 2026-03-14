@@ -44,7 +44,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
 function countFile($sourceFile): int {
    $fpointer = fopen($sourceFile, "r");
    $lineCount = 0;
-   while(fgets($sourceFile)) {
+   while(fgets($fpointer)) {
       $lineCount++;
    }
    return $lineCount;
