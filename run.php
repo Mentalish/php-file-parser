@@ -28,5 +28,5 @@ fclose($file);
 $timeSeconds = $end - $start;
 $timeMin = $timeSeconds/60;
 $filesPerSec = $fileEntriesCount / $timeSeconds;
-writeToLog($processNumber, "PROCESS", "Process finished processing file: Time elapsed " . $timeMin . ";Records Processed: " . $fileEntriesCount . " ;Files Per Second: " . $filesPerSec);
+writeToLog($processNumber, "PROCESS", "Process finished processing file: Time elapsed " . $timeMin . ";Records Processed: " . $fileEntriesCount . "; Files Per Second: " . $filesPerSec);
 ?>
