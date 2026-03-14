@@ -25,7 +25,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
       }
       
       fclose($fragmentFilePointer);
-      str_increment($newFileName);
+      $newFileName = str_increment($newFileName);
    }
 
    if(!feof($fpointer)) {
