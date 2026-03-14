@@ -3,6 +3,7 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
    $newFileName = "aaa";
    $fpointer = fopen($sourceFile, "r");
    $sourceLineCount = countFile($sourceFile);
+   $lineBuffer = "";
 
    rewind($fpointer);
 
@@ -18,22 +19,25 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
       $fragmentFilePointer = fopen($destDirectory . "/" . $newFileName, "w");
       for ($i=0; $i < $linesPerFile ; $i++) { 
          for ($j=0; $j < $lineBufferSize; $j++) { 
-            $lineBuffer = fgets($fpointer);
+            $lineBuffer .= fgets($fpointer);
          }
          fwrite($fragmentFilePointer, $lineBuffer);
+         $lineBuffer = "";
       }
 
       if($k == $numFiles - 1) {
          while(!feof($fpointer)) {
             for ($l=0; $l < $lineBufferSize; $l++) { 
-            $lineBuffer = fgets($fpointer);
+            $lineBuffer .= fgets($fpointer);
             }
-         fwrite($fragmentFilePointer, $lineBuffer);
+            fwrite($fragmentFilePointer, $lineBuffer);
+            $lineBuffer = "";
          }
       }
 
       if($lineBuffer) {
          fwrite($fragmentFilePointer, $lineBuffer); //handle partial buffer
+         $lineBuffer = "";
       }
 
       fclose($fragmentFilePointer);
@@ -47,6 +51,7 @@ function countFile($sourceFile): int {
    while(fgets($fpointer)) {
       $lineCount++;
    }
+   fclose($fpointer);
    return $lineCount;
 }
 ?>
