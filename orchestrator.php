@@ -17,8 +17,9 @@ function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, 
       }
 
       $filePath = $destDirectory . '/' . $file;
+      $fileSize = countFile($filePath);
       writeToLog($LOGFILE, "PROCESS", "Initializing process number " . ($index - 2)); 
-      shell_exec("php run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . " " . $lineOffset . " " . $LOGFILE . " > /dev/null 2>&1 &");
-      $lineOffset += countFile($filePath);  
+      shell_exec("php run.php " . $un . " " . $pw . " " . $host . " " . $db . " " . $filePath . " " . $lineOffset . " " . $LOGFILE . " " . $fileSize . " > /dev/null 2>&1 &");
+      $lineOffset += $fileSize;  
    }
 }
