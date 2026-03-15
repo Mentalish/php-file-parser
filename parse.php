@@ -117,7 +117,7 @@ function checkTypo($typoRegex, $parameter, $parameterName, $lineNumber, $errorLo
    return false; 
 }
 
-function validateSerialNumber(&$prefex, &$body, $serialNumber, $lineNumber, $errorLogName) : bool {
+function validateSerialNumber(&$prefix, &$body, $serialNumber, $lineNumber, $errorLogName) : bool {
       $delimeter = "";
       partSerialNumber($serialNumber, $prefix, $delimeter, $body);
 
