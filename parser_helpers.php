@@ -33,7 +33,7 @@ function validateSerialNumber(&$prefix, &$body, $serialNumber, $lineNumber, $err
       partSerialNumber($serialNumber, $prefix, $delimeter, $body);
 
       //incorect size
-      if(strlen($body) != 32) {
+      if(strlen($body) != 64) {
          writeToLog($errorLogName, "DATA ERROR", "Serial number is the incorrect length on entry number " . $lineNumber);
          return true;
       }
