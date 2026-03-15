@@ -20,7 +20,7 @@ $lineNumber = $argv[6];
 $processNumber = $argv[7];
 $fileEntriesCount = $argv[8];
 while ($tokens = getEntries($file, 10)) {
-   parseTokens($tokens, 3, $lineNumber, $argv[7], true, $dblink, $deviceTypeCache, $manufacturerCache);
+   parseTokens($tokens, 3, $lineNumber, $argv[7], $dblink, $deviceTypeCache, $manufacturerCache);
 }
 
 $end = microtime(true);
