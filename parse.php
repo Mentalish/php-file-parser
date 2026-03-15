@@ -79,13 +79,14 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
             $deviceTypeId = $deviceTypeCache[$deviceType];
          }
          
-         //insert the entire entry to the main table
-         $sql = "INSERT INTO `devices` (`device_type_id`, `manufacturer_id`, `serial_number_prefix`, `serial_number_body` , `line_number`)
+         //attempt to write full device entry into the database
+         $sql = "INSERT IGNORE INTO `devices` (`device_type_id`, `manufacturer_id`, `serial_number_prefix`, `serial_number_body` , `line_number`)
            values ('$deviceTypeId', '$manufacturerId', '$prefix', '$body', '$lineCount')";
-         $dblink->query($sql) or die;
-
-         }  
+         if($dblink->query($sql) && !$dblink->insert_id){
+            writeToLog($errorLogName, "DATA ERROR", "entry " . $lineCount . " is a duplicate");
+         }
       }
+   }
 }
 
 function partSerialNumber(string $fullSerialNumber, &$prefix, &$delimeter, &$body) : void {
