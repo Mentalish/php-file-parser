@@ -51,7 +51,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
             if(!($manufacturerId = $dblink->query($sqlGet)->fetch_column())) {
                $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";  
                //if cant insert atempt to get manufacturer again
-               if($dblink->query($sqlInsert)) {
+               if($dblink->query($sqlInsert) && $dblink->insert_id) {
                   $manufacturerId = $dblink->insert_id;
                } else { 
                   $manufacturerId = $dblink->query($sqlGet)->fetch_column();
@@ -67,7 +67,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
             $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; 
             if(!($deviceTypeId = $dblink->query($sqlGet)->fetch_column())) {
                $sqlInsert = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
-               if($dblink->query($sqlInsert)) {
+               if($dblink->query($sqlInsert) && $dblink->insert_id) {
                   $deviceTypeId = $dblink->insert_id;
                } else {
                   $deviceTypeId = $dblink->query($sqlGet)->fetch_column();
