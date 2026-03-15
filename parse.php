@@ -47,11 +47,15 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       if ($errorLine == false && $dbCopy == true) {
          // find if manufacturer is already in the database if not create it
          if(!isset($manufacturerCache[$manufacturer])) {
-            $sql = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; 
-            if(!($manufacturerId = $dblink->query($sql)->fetch_column())) {
-               $sql = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";
-               $dblink->query($sql);
-               $manufacturerId = $dblink->insert_id;
+            $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; 
+            if(!($manufacturerId = $dblink->query($sqlGet)->fetch_column())) {
+               $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";  
+               //if cant insert atempt to get manufacturer again
+               if($dblink->query($sqlInsert)) {
+                  $manufacturerId = $dblink->insert_id;
+               } else { 
+                  $manufacturerId = $dblink->query($sqlGet)->fetch_column();
+               }
             }
             $manufacturerCache[$manufacturer] = $manufacturerId;
          } else {
@@ -60,11 +64,14 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
 
          // find if device type is already in the database if not create it
          if(!isset($deviceTypeCache[$deviceType])) {
-            $sql = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; 
-            if(!($deviceTypeId = $dblink->query($sql)->fetch_column())) {
-               $sql = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
-               $dblink->query($sql);
-               $deviceTypeId = $dblink->insert_id;
+            $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; 
+            if(!($deviceTypeId = $dblink->query($sqlGet)->fetch_column())) {
+               $sqlInsert = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
+               if($dblink->query($sqlInsert)) {
+                  $deviceTypeId = $dblink->insert_id;
+               } else {
+                  $deviceTypeId = $dblink->query($sqlGet)->fetch_column();
+               }
             }
             $deviceTypeCache[$deviceType] = $deviceTypeId; 
          } else {
