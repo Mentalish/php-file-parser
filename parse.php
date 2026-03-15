@@ -80,7 +80,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
          }
          
          //insert the entire entry to the main table
-         $sql = "SELECT * FROM `devices` WHERE `device_type_id` = '$deviceTypeId' AND `manufacturer_id` = '$manufacturerId' AND `serial_number_prefix` = '$prefix' AND `serial_number_body` = '$body'";
+         $sql = "SELECT * FROM `devices` WHERE `serial_number_prefix` = '$prefix' AND `serial_number_body` = '$body'";
          if($dblink->query($sql)->fetch_column()) {
             writeToLog($errorLogName, "DATA ERROR", "entry " . $lineCount . " is a duplicate");
             continue;
