@@ -49,7 +49,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
          if(!isset($manufacturerCache[$manufacturer])) {
             $sql = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; 
             if(!($manufacturerId = $dblink->query($sql)->fetch_column())) {
-               $sql = "INSERT INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";
+               $sql = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";
                $dblink->query($sql);
                $manufacturerId = $dblink->insert_id;
             }
@@ -62,7 +62,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
          if(!isset($deviceTypeCache[$deviceType])) {
             $sql = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; 
             if(!($deviceTypeId = $dblink->query($sql)->fetch_column())) {
-               $sql = "INSERT INTO `device_types` (`device_type_name`) values ('$deviceType')";
+               $sql = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
                $dblink->query($sql);
                $deviceTypeId = $dblink->insert_id;
             }
