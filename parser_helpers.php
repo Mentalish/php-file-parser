@@ -19,12 +19,17 @@ function detectEmpty($parameter, $parameterName, $lineNumber, $errorLogName) : b
    return false;
 }
 
-function checkTypo($typoRegex, $parameter, $parameterName, $lineNumber, $errorLogName) : bool {
-   if(strlen($parameter) == 1 || preg_match ($typoRegex, $parameter)) {
-      writeToLog($errorLogName, "DATA ERROR", "Typo on parameter: " . $parameterName . " at line: " . $lineNumber);
+function checkAndFixTypo($typoRegex, &$parameter, $parameterName, $lineNumber, $errorLogName) : bool {
+   if(strlen($parameter) == 1) {
+      writeToLog($errorLogName, "DATA ERROR", "Paramter too short: " . $parameterName . " at line: " . $lineNumber);
       return true;
    }
 
+   if($newParamter = preg_replace($typoRegex, '', $parameter)) {
+      writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo found and fixed at" . $lineNumber . "; new string: " . $newParamter . "; old string: " . $parameter);
+      $parameter = $newParamter;
+      return false;
+   }
    return false; 
 }
 
