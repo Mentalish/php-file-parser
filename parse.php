@@ -3,8 +3,7 @@ include_once 'log.php';
 include_once 'parser_helpers.php';
 
 function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
-   $TYPO_MANUFACTURER = "/(^[a-z])|([0-9@#$%^&*()'`])/";
-   $TYPO_DEVICE_TYPE = "/([0-9@#$%^&*()'`])/";
+   $TYPO_REGEX = "/[0-9!@#$%^&*+=()'`_\?<>;:|\[\]\\\-]/";
    foreach ($tokens as $entry) {
       $errorLine = false;
       $lineCount++;
@@ -23,7 +22,7 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       if(detectEmpty($deviceType, "device type", $lineCount, $errorLogName)) {
          $errorLine = true;
       } else {
-         if(checkTypo($TYPO_DEVICE_TYPE, $deviceType, "device type", $lineCount, $errorLogName)) {
+         if(checkAndFixTypo($TYPO_REGEX, $deviceType, "device type", $lineCount, $errorLogName)) {
          $errorLine = true;
          }
       }
@@ -31,8 +30,10 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       if(detectEmpty($manufacturer, "manufacturer", $lineCount, $errorLogName)) {
          $errorLine = true;
       } else {
-         if(checkTypo($TYPO_MANUFACTURER, $manufacturer, "manufacturer", $lineCount, $errorLogName)) {
+         if(checkAndFixTypo($TYPO_REGEX, $manufacturer, "manufacturer", $lineCount, $errorLogName)) {
             $errorLine = true;
+         } else if(checkAndFixCase($manufacturer, "manufacturer", $lineCount, $errorLogName)) {
+            
          }
       }
 
@@ -46,8 +47,8 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
 
       //write to db
       if ($errorLine == false) {
-         writeDeviceType($dblink, $deviceTypeCache, $deviceType, $deviceTypeId);
-         writeManufacturer($dblink, $manufacturerCache, $manufacturer, $manufacturerId);
+         writeDeviceType($errorLogName, $dblink, $deviceTypeCache, $deviceType, $deviceTypeId, $lineCount);
+         writeManufacturer($errorLogName, $dblink, $manufacturerCache, $manufacturer, $manufacturerId, $lineCount);
          writeDeviceEntry($dblink, $errorLogName, $deviceTypeId, $manufacturerId, $prefix, $body, $lineCount); 
       }
    }
