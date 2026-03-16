@@ -99,10 +99,10 @@ function writeDeviceEntry($dblink, $errorLogName, $deviceTypeId, $manufacturerId
 function checkSimilarity($errorLogFile, array $currentEntries, $newEntry, $entryNumber) {
    $candidates = [];
    foreach ($currentEntries as $entry) {
-      similar_text($entry, $newEntry, $smilarity);
+      similar_text($entry, $newEntry, $similarity);
 
-      if($smilarity >= 40.0) {
-         $candidates[$smilarity] = $entry;
+      if($similarity >= 40.0) {
+         $candidates[$similarity] = $entry;
       }
 
    }
