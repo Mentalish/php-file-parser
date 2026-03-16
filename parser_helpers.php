@@ -103,14 +103,14 @@ function checkSimilarity($errorLogFile, array $currentEntries, $newEntry, $entry
    foreach ($currentEntries as $entry) {
       similar_text($entry, $newEntry, $similarity);
 
-      if($similarity >= 20.0 && strlen($entry) > strlen($newEntry)) {
+      if($similarity >= 30.0 && strlen($entry) > strlen($newEntry)) {
          $candidates[$similarity] = $entry;
       }
 
    }
    if($candidates) {
             $newString = $candidates[max(array_keys($candidates))];
-            writeToLog($errorLogFile, "DATA ERROR (REMIDIATED)", "joey word found at entry " . $entryNumber);
+            writeToLog($errorLogFile, "DATA ERROR (REMIDIATED)", "joey word found at entry " . $entryNumber . "; new string: " . $newString . "; old string: ", $newEntry);
             return $newString;
          }
 
