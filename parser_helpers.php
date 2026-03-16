@@ -49,9 +49,10 @@ function validateSerialNumber(&$prefix, &$body, $serialNumber, $lineNumber, $err
 
 function writeDeviceType($dblink, &$deviceTypeCache, $deviceType, &$deviceTypeId) {
 // find if device type is already in the database if not create it
-   if(!isset($deviceTypeCache[$deviceType])) {
+   if(!isset($deviceTypeCache[$deviceType])) { // cache miss
       $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; 
-      if(!($deviceTypeId = $dblink->query($sqlGet)->fetch_column())) {
+      if(!($deviceTypeId = $dblink->query($sqlGet)->fetch_column())) { //db miss
+         $deviceType = checkSimilarity(array_keys($deviceTypeCache), $deviceType); //check joey entries
          $sqlInsert = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
          //if cant insert attempt to get manufacturer again
          if($dblink->query($sqlInsert) && $dblink->insert_id) {
@@ -61,7 +62,7 @@ function writeDeviceType($dblink, &$deviceTypeCache, $deviceType, &$deviceTypeId
          }
       }
       $deviceTypeCache[$deviceType] = $deviceTypeId; 
-   } else {
+   } else { // cache hit
       $deviceTypeId = $deviceTypeCache[$deviceType];
    }
 }
@@ -91,6 +92,25 @@ function writeDeviceEntry($dblink, $errorLogName, $deviceTypeId, $manufacturerId
      values ('$deviceTypeId', '$manufacturerId', '$prefix', '$body', '$entryNumber')";
    if($dblink->query($sql) && !$dblink->insert_id){
       writeToLog($errorLogName, "DATA ERROR", "entry " . $entryNumber . " is a duplicate");
+   }
+}
+
+function checkSimilarity($errorLogFile, array $currentEntries, $newEntry, $entryNumber) {
+   $candidates = [];
+   foreach ($currentEntries as $entry) {
+      similar_text($entry, $newEntry, $smilarity);
+
+      if($smilarity >= 40.0) {
+         $candidates[$smilarity] = $entry;
+      }
+
+      if($candidates) {
+         $newString = $candidates[max(array_keys($candidates))];
+         writeToLog($errorLogFile, "DATA ERROR (REMIDIATED)", "joey word found at entry " . $newString);
+         return $newString;
+      }
+
+      return $newEntry;
    }
 }
 ?>
