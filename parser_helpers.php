@@ -26,7 +26,7 @@ function checkAndFixTypo($typoRegex, &$parameter, $parameterName, $lineNumber, $
    }
 
    $newParameter = preg_replace($typoRegex, '', $parameter);
-   if($newParameter === $parameter) {
+   if($newParameter !== $parameter) {
       writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo found and fixed at " . $lineNumber . "; new string: " . $newParameter . "; old string: " . $parameter);
       $parameter = $newParameter;
       return false;
