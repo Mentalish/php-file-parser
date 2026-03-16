@@ -46,8 +46,8 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
 
       //write to db
       if ($errorLine == false) {
-         writeDeviceType($dblink, $deviceTypeCache, $deviceType, $deviceTypeId);
-         writeManufacturer($dblink, $manufacturerCache, $manufacturer, $manufacturerId);
+         writeDeviceType($errorLogName, $dblink, $deviceTypeCache, $deviceType, $deviceTypeId);
+         writeManufacturer($errorLogName, $dblink, $manufacturerCache, $manufacturer, $manufacturerId);
          writeDeviceEntry($dblink, $errorLogName, $deviceTypeId, $manufacturerId, $prefix, $body, $lineCount); 
       }
    }
