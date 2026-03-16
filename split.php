@@ -60,6 +60,9 @@ function countFile($sourceFile): int {
 }
 
 function checkIllegalDelimiterPlacement (&$line, $logFileName, $linesProcessedInFragment, $k, $linesPerFile) {
+   if(!isset($line)) {
+      return;
+   }
     if($line[0] == ',') {
             writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at beginning of line " . (($linesProcessedInFragment + 1) * ($k * $linesPerFile)));
             $line = substr_replace($line, '', 0, 1);
