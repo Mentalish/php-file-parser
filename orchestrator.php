@@ -4,7 +4,7 @@ include_once('split.php');
 
 function orchestrate($dataFile, $processCount, $destDirectory, $un, $pw, $host, $db) {
    $LOGFILE = 'import.log';
-   splitFile($dataFile, $destDirectory, intval($processCount), 10);
+   splitFile($dataFile, $destDirectory, intval($processCount), 10, $LOGFILE);
    $sourceFileSize = countFile($dataFile);
    writeToLog($LOGFILE, "START", "Starting import process on file; " . $dataFile . "; " . $sourceFileSize . " records found");
 
