@@ -54,6 +54,7 @@ function writeDeviceType($errorLogFile, $dblink, &$deviceTypeCache, $deviceType,
       if(!($deviceTypeId = $dblink->query($sqlGet)->fetch_column())) { //db miss
          $deviceType = checkSimilarity($errorLogFile, array_keys($deviceTypeCache), $deviceType); //check joey entries
          $sqlInsert = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
+         $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; //refesh with new devicetype 
          //if cant insert attempt to get manufacturer again
          if($dblink->query($sqlInsert) && $dblink->insert_id) {
             $deviceTypeId = $dblink->insert_id;
@@ -73,7 +74,8 @@ function writeManufacturer($errorLogFile, $dblink, &$manufacturerCache, $manufac
       $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; 
       if(!($manufacturerId = $dblink->query($sqlGet)->fetch_column())) { //db miss
          $manufacturer = checkSimilarity($errorLogFile, array_keys($manufacturerCache), $manufacturer); //check joey entries
-         $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";  
+         $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";
+         $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; // refesh with new device type
          //if cant insert attempt to get manufacturer again
          if($dblink->query($sqlInsert) && $dblink->insert_id) {
             $manufacturerId = $dblink->insert_id;
