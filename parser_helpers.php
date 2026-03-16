@@ -25,12 +25,19 @@ function checkAndFixTypo($typoRegex, &$parameter, $parameterName, $lineNumber, $
       return true;
    }
 
-   if($newParamter = preg_replace($typoRegex, '', $parameter)) {
-      writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo found and fixed at" . $lineNumber . "; new string: " . $newParamter . "; old string: " . $parameter);
-      $parameter = $newParamter;
+   if($newParameter = preg_replace($typoRegex, '', $parameter)) {
+      writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo found and fixed at" . $lineNumber . "; new string: " . $newParameter . "; old string: " . $parameter);
+      $parameter = $newParameter;
       return false;
    }
    return false; 
+}
+
+function checkAndFixCase(&$parameter, $paramterName, $lineNumber, $errorLogName){
+   if(preg_match('/[a-z]/', $parameter)) {
+      $newParameter = ucfirst($parameter);
+      writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo found and fixed at" . $lineNumber . "; new string: " . $newParameter . "; old string: " . $parameter);
+   }
 }
 
 function validateSerialNumber(&$prefix, &$body, $serialNumber, $lineNumber, $errorLogName) : bool {
