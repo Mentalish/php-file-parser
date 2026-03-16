@@ -103,7 +103,7 @@ function checkSimilarity($errorLogFile, array $currentEntries, $newEntry, $entry
    foreach ($currentEntries as $entry) {
       similar_text($entry, $newEntry, $similarity);
 
-      if($similarity >= 30.0 && strlen($entry) > strlen($newEntry)) {
+      if($similarity >= 25.0 && strlen($entry) > strlen($newEntry)) {
          $candidates[$similarity] = $entry;
       }
 
