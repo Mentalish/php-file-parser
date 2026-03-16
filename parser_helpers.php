@@ -105,13 +105,13 @@ function checkSimilarity($errorLogFile, array $currentEntries, $newEntry, $entry
          $candidates[$smilarity] = $entry;
       }
 
-      if($candidates) {
-         $newString = $candidates[max(array_keys($candidates))];
-         writeToLog($errorLogFile, "DATA ERROR (REMIDIATED)", "joey word found at entry " . $newString);
-         return $newString;
-      }
-
-      return $newEntry;
    }
+   if($candidates) {
+            $newString = $candidates[max(array_keys($candidates))];
+            writeToLog($errorLogFile, "DATA ERROR (REMIDIATED)", "joey word found at entry " . $newString);
+            return $newString;
+         }
+
+         return $newEntry;
 }
 ?>
