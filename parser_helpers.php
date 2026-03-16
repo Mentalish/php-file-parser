@@ -49,7 +49,7 @@ function validateSerialNumber(&$prefix, &$body, $serialNumber, $lineNumber, $err
 
 function writeDeviceType($dblink, &$deviceTypeCache, $deviceType, &$deviceTypeId) {
 // find if device type is already in the database if not create it
-   if(!isset($deviceTypeCache[$deviceType])) { // cache miss
+   if(!isset($deviceTypeCache[$deviceType])) { //cache miss
       $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; 
       if(!($deviceTypeId = $dblink->query($sqlGet)->fetch_column())) { //db miss
          $deviceType = checkSimilarity(array_keys($deviceTypeCache), $deviceType); //check joey entries
@@ -69,9 +69,10 @@ function writeDeviceType($dblink, &$deviceTypeCache, $deviceType, &$deviceTypeId
 
 function writeManufacturer($dblink, &$manufacturerCache, $manufacturer, &$manufacturerId) {
 // find if manufacturer is already in the database if not create it
-   if(!isset($manufacturerCache[$manufacturer])) {
+   if(!isset($manufacturerCache[$manufacturer])) { //cache miss
       $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; 
-      if(!($manufacturerId = $dblink->query($sqlGet)->fetch_column())) {
+      if(!($manufacturerId = $dblink->query($sqlGet)->fetch_column())) { //db miss
+         $manufacturer = checkSimilarity(array_keys($manufacturerCache), $manufacturer); //check joey entries
          $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";  
          //if cant insert attempt to get manufacturer again
          if($dblink->query($sqlInsert) && $dblink->insert_id) {
