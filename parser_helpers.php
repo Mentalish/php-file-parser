@@ -35,9 +35,9 @@ function checkAndFixTypo($typoRegex, &$parameter, $parameterName, $lineNumber, $
 }
 
 function checkAndFixCase(&$parameter, $paramterName, $lineNumber, $errorLogName){
-   if(preg_match('/[a-z]/', $parameter)) {
+   if(preg_match('/^[a-z]/', $parameter)) {
       $newParameter = ucfirst($parameter);
-      writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo found and fixed at" . $lineNumber . "; new string: " . $newParameter . "; old string: " . $parameter);
+      writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo (CASE) found and fixed at " . $lineNumber . "; new string: " . $newParameter . "; old string: " . $parameter);
    }
 }
 
