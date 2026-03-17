@@ -60,19 +60,27 @@ function validateSerialNumber(&$prefix, &$body, $serialNumber, $lineNumber, $err
       return false;
 }
 
-function writeDeviceType($errorLogFile, $dblink, &$deviceTypeCache, $deviceType, &$deviceTypeId, $entryNumber) {
+function writeDeviceType($errorLogFile, $dblink, &$deviceTypeCache, $deviceType, &$deviceTypeId, $entryNumber, &$joeyWordCache) {
 // find if device type is already in the database if not create it
    if(!isset($deviceTypeCache[$deviceType])) { //cache miss
       $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; 
       if(!($deviceTypeId = $dblink->query($sqlGet)->fetch_column())) { //db miss
-         $deviceType = checkSimilarity($errorLogFile, array_keys($deviceTypeCache), $deviceType, $entryNumber); //check joey entries
-         $sqlInsert = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
-         $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; //refesh with new devicetype 
-         //if cant insert attempt to get manufacturer again
-         if($dblink->query($sqlInsert) && $dblink->insert_id) {
-            $deviceTypeId = $dblink->insert_id;
+         if(!isset($joeyWordCache[$deviceType])) { //joey word cache miss
+            $possibleJoey = $deviceType;
+            $isJoey = checkSimilarity($errorLogFile, array_keys($deviceTypeCache), $deviceType, $entryNumber);
+            $sqlInsert = "INSERT IGNORE INTO `device_types` (`device_type_name`) values ('$deviceType')";
+            $sqlGet = "SELECT `device_type_id` FROM `device_types` WHERE `device_type_name` = '$deviceType' ;"; //refesh with new devicetype 
+            //if cant insert attempt to get manufacturer again
+            if($dblink->query($sqlInsert) && $dblink->insert_id) {
+               $deviceTypeId = $dblink->insert_id;
+            } else {
+               $deviceTypeId = $dblink->query($sqlGet)->fetch_column();
+            }
+            if ($isJoey) { // new joey    
+               $joeyWordCache[$possibleJoey] = $deviceTypeId; 
+            }
          } else {
-            $deviceTypeId = $dblink->query($sqlGet)->fetch_column();
+            $deviceTypeId = $joeyWordCache[$deviceType]; 
          }
       }
       $deviceTypeCache[$deviceType] = $deviceTypeId; 
@@ -81,19 +89,29 @@ function writeDeviceType($errorLogFile, $dblink, &$deviceTypeCache, $deviceType,
    }
 }
 
-function writeManufacturer($errorLogFile, $dblink, &$manufacturerCache, $manufacturer, &$manufacturerId, $entryNumber) {
+function writeManufacturer($errorLogFile, $dblink, &$manufacturerCache, $manufacturer, &$manufacturerId, $entryNumber, &$joeyWordCache) {
 // find if manufacturer is already in the database if not create it
    if(!isset($manufacturerCache[$manufacturer])) { //cache miss
       $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; 
       if(!($manufacturerId = $dblink->query($sqlGet)->fetch_column())) { //db miss
-         $manufacturer = checkSimilarity($errorLogFile, array_keys($manufacturerCache), $manufacturer, $entryNumber); //check joey entries
-         $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";
-         $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; // refesh with new device type
-         //if cant insert attempt to get manufacturer again
-         if($dblink->query($sqlInsert) && $dblink->insert_id) {
-            $manufacturerId = $dblink->insert_id;
-         } else { 
-            $manufacturerId = $dblink->query($sqlGet)->fetch_column();
+         if(!isset($joeyWordCache[$manufacturer])) { // joey word cache miss
+            $possibleJoey = $manufacturer;
+            $isJoey = checkSimilarity($errorLogFile, array_keys($manufacturerCache), $manufacturer, $entryNumber);
+            $manufacturer = checkSimilarity($errorLogFile, array_keys($manufacturerCache), $manufacturer, $entryNumber); //check joey entries
+            $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";
+            $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; // refesh with new device type
+            //if cant insert attempt to get manufacturer again
+            if($dblink->query($sqlInsert) && $dblink->insert_id) {
+               $manufacturerId = $dblink->insert_id;
+            } else { 
+               $manufacturerId = $dblink->query($sqlGet)->fetch_column();
+            }
+
+            if($isJoey) {
+               $joeyWordCache[$possibleJoey] = $manufacturerId;
+            }
+         } else {
+            $manufacturerId = $joeyWordCache[$manufacturer];
          }
       }
       $manufacturerCache[$manufacturer] = $manufacturerId;
@@ -111,7 +129,7 @@ function writeDeviceEntry($dblink, $errorLogName, $deviceTypeId, $manufacturerId
    }
 }
 
-function checkSimilarity($errorLogFile, array $currentEntries, $newEntry, $entryNumber) {
+function checkSimilarity($errorLogFile, array $currentEntries, &$newEntry, $entryNumber): bool{
    $candidates = [];
    foreach ($currentEntries as $entry) {
       similar_text($entry, $newEntry, $similarity);
@@ -133,8 +151,9 @@ function checkSimilarity($errorLogFile, array $currentEntries, $newEntry, $entry
    if($candidates) {
          $newString = $candidates[max(array_keys($candidates))];
          writeToLog($errorLogFile, "DATA ERROR (REMIDIATED)", "joey word found at entry " . $entryNumber . "; new string: " . $newString . "; old string: " . $newEntry);
-         return $newString;
+         $newEntry = $newString;
+         return true;
       }
-   return $newEntry;
+   return false;
 }
 ?>

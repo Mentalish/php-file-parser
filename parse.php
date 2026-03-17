@@ -2,7 +2,7 @@
 include_once 'log.php';
 include_once 'parser_helpers.php';
 
-function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, $dblink, &$deviceTypeCache, &$manufacturerCache): void {
+function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, $dblink, &$deviceTypeCache, &$manufacturerCache, &$DeviceJoeyWordCache, &$manufacturerJoeyWordCache): void {
    $TYPO_REGEX = "/[0-9!@#$%^&*+=()'`_\?<>;:|\[\]\\\-]/";
    foreach ($tokens as $entry) {
       $errorLine = false;
@@ -47,8 +47,8 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
 
       //write to db
       if ($errorLine == false) {
-         writeDeviceType($errorLogName, $dblink, $deviceTypeCache, $deviceType, $deviceTypeId, $lineCount);
-         writeManufacturer($errorLogName, $dblink, $manufacturerCache, $manufacturer, $manufacturerId, $lineCount);
+         writeDeviceType($errorLogName, $dblink, $deviceTypeCache, $deviceType, $deviceTypeId, $lineCount, $deviceJoeyWordCache);
+         writeManufacturer($errorLogName, $dblink, $manufacturerCache, $manufacturer, $manufacturerId, $lineCount, $manufacturerJoeyWordCache);
          writeDeviceEntry($dblink, $errorLogName, $deviceTypeId, $manufacturerId, $prefix, $body, $lineCount); 
       }
    }
