@@ -63,14 +63,16 @@ function checkIllegalDelimiterPlacement (&$line, $logFileName, $linesProcessedIn
    if(!is_string($line)) {
       return;
    }
-    if($line[0] == ',') {
+
+   if(preg_match('/[a-z]/i', $line)) { //only check on non-empty entries
+      if($line[0] == ',') {
             writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at beginning of line " . (($linesProcessedInFragment + 1) + ($k * $linesPerFile)));
             $line = substr_replace($line, '', 0, 1);
          }
    if($line[strlen($line) - 2] == ',') {
             writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at end of line " . (($linesProcessedInFragment + 1) + ($k * $linesPerFile)));
             $line = substr_replace($line, '', -2, 1);
-         }
-
+      }
+   }
 }
 ?>
