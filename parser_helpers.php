@@ -96,8 +96,7 @@ function writeManufacturer($errorLogFile, $dblink, &$manufacturerCache, $manufac
       if(!($manufacturerId = $dblink->query($sqlGet)->fetch_column())) { //db miss
          if(!isset($joeyWordCache[$manufacturer])) { // joey word cache miss
             $possibleJoey = $manufacturer;
-            $isJoey = checkSimilarity($errorLogFile, array_keys($manufacturerCache), $manufacturer, $entryNumber);
-            $manufacturer = checkSimilarity($errorLogFile, array_keys($manufacturerCache), $manufacturer, $entryNumber); //check joey entries
+            $isJoey = checkSimilarity($errorLogFile, array_keys($manufacturerCache), $manufacturer, $entryNumber);   //check joey entries
             $sqlInsert = "INSERT IGNORE INTO `manufacturers` (`manufacturer_name`) values ('$manufacturer')";
             $sqlGet = "SELECT `manufacturer_id` FROM `manufacturers` WHERE `manufacturer_name` = '$manufacturer' ;"; // refesh with new device type
             //if cant insert attempt to get manufacturer again
