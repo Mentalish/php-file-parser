@@ -60,14 +60,14 @@ function countFile($sourceFile): int {
 }
 
 function checkIllegalDelimiterPlacement (&$line, $logFileName, $linesProcessedInFragment, $k, $linesPerFile) {
-   if(!isset($line)) {
+   if(!is_string($line)) {
       return;
    }
     if($line[0] == ',') {
-            writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at beginning of line " . (($linesProcessedInFragment + 1) * ($k * $linesPerFile)));
+            writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at beginning of line " . (($linesProcessedInFragment + 1) + ($k * $linesPerFile)));
             $line = substr_replace($line, '', 0, 1);
          }
-         if($line[strlen($line) - 2] == ',') {
+   if($line[strlen($line) - 2] == ',') {
             writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at end of line " . (($linesProcessedInFragment + 1) + ($k * $linesPerFile)));
             $line = substr_replace($line, '', -2, 1);
          }
