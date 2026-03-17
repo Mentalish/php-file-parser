@@ -2,7 +2,7 @@
 include_once 'log.php';
 include_once 'parser_helpers.php';
 
-function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, $dblink, &$deviceTypeCache, &$manufacturerCache, &$DeviceJoeyWordCache, &$manufacturerJoeyWordCache): void {
+function parseTokens(array $tokens, int $numParameters, int &$lineCount, string $errorLogName, $dblink, &$deviceTypeCache, &$manufacturerCache, &$deviceJoeyWordCache, &$manufacturerJoeyWordCache): void {
    $TYPO_REGEX = "/[0-9!@#$%^&*+=()'`_\?<>;:|\[\]\\\-]/";
    foreach ($tokens as $entry) {
       $errorLine = false;

@@ -141,8 +141,8 @@ function checkSimilarity($errorLogFile, array $currentEntries, &$newEntry, $entr
          $shorterEntry = $entry;
       }
 
-      if($similarity >= 65.0 && $longerEntry === $entry){
-         $candidates[$similarity] = $entry;
+      if($similarity >= 65.0){
+         $candidates[$similarity] = $longerEntry;
       } else if(str_contains($longerEntry, $shorterEntry)) {
          $candidates[$similarity] = $longerEntry;
       }
