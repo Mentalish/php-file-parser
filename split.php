@@ -1,5 +1,7 @@
 <?php
-function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
+include_once 'log.php';
+
+function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize, $logFileName) {
    $newFileName = "aaa";
    $fpointer = fopen($sourceFile, "r");
    $sourceLineCount = countFile($sourceFile);
@@ -20,18 +22,28 @@ function splitFile($sourceFile, $destDirectory, $numFiles, $lineBufferSize) {
       $fragmentFilePointer = fopen($destDirectory . "/" . $newFileName, "w");
       
       while ($linesProcessedInFragment < $linesPerFile && !feof($fpointer)) {
-         fwrite($fragmentFilePointer, fgets($fpointer));
+         $line = fgets($fpointer);
+         
+         checkIllegalDelimiterPlacement($line, $logFileName, $linesProcessedInFragment, $k, $linesPerFile);
+        
+         fwrite($fragmentFilePointer, $line);
          $linesProcessedInFragment++; 
       }
       
       fclose($fragmentFilePointer);
       $newFileName = str_increment($newFileName);
    }
-
+   
+   $linesProcessedInFragment = 0;
    if(!feof($fpointer)) {
       $lastFilePointer = fopen(str_decrement($newFileName), "a");
       while(!feof($fpointer)) {
-         fwrite($lastFilePointer, fgets($fpointer));
+         $line = fgets($fpointer);
+
+         checkIllegalDelimiterPlacement($line, $logFileName, $linesProcessedInFragment, 5, $linesPerFile);
+
+         fwrite($lastFilePointer, $line);
+         $linesProcessedInFragment++;
       }
       fclose($lastFilePointer);
    } 
@@ -45,5 +57,22 @@ function countFile($sourceFile): int {
    }
    fclose($fpointer);
    return $lineCount;
+}
+
+function checkIllegalDelimiterPlacement (&$line, $logFileName, $linesProcessedInFragment, $k, $linesPerFile) {
+   if(!is_string($line)) {
+      return;
+   }
+
+   if(preg_match('/[a-z]/i', $line)) { //only check on non-empty entries
+      if($line[0] == ',') {
+            writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at beginning of line " . (($linesProcessedInFragment + 1) + ($k * $linesPerFile)));
+            $line = substr_replace($line, '', 0, 1);
+         }
+   if($line[strlen($line) - 2] == ',') {
+            writeToLog($logFileName, "FILE PREPROCESS", "illegal use of delimiter removed at end of line " . (($linesProcessedInFragment + 1) + ($k * $linesPerFile)));
+            $line = substr_replace($line, '', -2, 1);
+      }
+   }
 }
 ?>
