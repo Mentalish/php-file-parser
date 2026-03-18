@@ -29,7 +29,6 @@ function checkAndFixTypo($typoRegex, &$parameter, $parameterName, $lineNumber, $
    if($newParameter !== $parameter) {
       writeToLog($errorLogName, "DATA ERROR (REMIDIATED)", "Typo found and fixed at " . $lineNumber . "; new string: " . $newParameter . "; old string: " . $parameter);
       $parameter = $newParameter;
-      return false;
    }
    return false; 
 }

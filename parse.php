@@ -32,9 +32,8 @@ function parseTokens(array $tokens, int $numParameters, int &$lineCount, string 
       } else {
          if(checkAndFixTypo($TYPO_REGEX, $manufacturer, "manufacturer", $lineCount, $errorLogName)) {
             $errorLine = true;
-         } else if(checkAndFixCase($manufacturer, "manufacturer", $lineCount, $errorLogName)) {
-            
          }
+         checkAndFixCase($manufacturer, "manufacturer", $lineCount, $errorLogName);
       }
 
       if(detectEmpty($serialNumber, "serial number", $lineCount, $errorLogName)) {
